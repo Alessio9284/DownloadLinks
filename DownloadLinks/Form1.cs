@@ -1,13 +1,32 @@
 ﻿using System;
+using System.Diagnostics;
+using System.IO;
 using System.Net;
 
 namespace DownloadLinks
 {
     public partial class finestra : MetroFramework.Forms.MetroForm
     {
+        private string url, rad, ext, dest;
+        private int da, a_;
+        private bool riempimento;
+
         public finestra()
         {
             InitializeComponent();
+        }
+
+        public finestra(string[] args)
+        {
+            // url radice estensione da a riempimento destinazione
+
+            url = args[0];
+            rad = args[1];
+            ext = args[2];
+            da = Convert.ToInt32(args[3]);
+            a_ = Convert.ToInt32(args[4]);
+            riempimento = Convert.ToBoolean(args[5]);
+            dest = args[6];
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -25,6 +44,12 @@ namespace DownloadLinks
         {
             for (int i = Convert.ToInt32(da_text.Text); i <= Convert.ToInt32(a_text.Text); i++)
                 start_download(ref i);
+        }
+
+        public void download_Terminal()
+        {
+            for (int i = da; i <= a_; i++)
+                start_download_terminal(ref i);
         }
 
         private void start_download(ref int i)
@@ -57,6 +82,41 @@ namespace DownloadLinks
                 {
                     i = Convert.ToInt32(a_text.Text);
                     errore.Text += err.StackTrace;
+                }
+            }
+        }
+
+        private void start_download_terminal(ref int i)
+        {
+            string zeri = "", nomefile;
+
+            if (riempimento)
+            {
+                // riempimento con zeri
+                if (i < 10) zeri = "00";
+                else if (i < 100) zeri = "0";
+            }
+
+            nomefile = rad + zeri + i + ext;
+
+            using (var client = new WebClient())
+            {
+                try
+                {
+                    Debug.WriteLine(nomefile);
+                    //client.DownloadFile(new Uri(url + nomefile), dest + nomefile);
+
+                    using (Stream data = client.OpenRead(new Uri(url + nomefile)))
+                    {
+                        using (Stream targetfile = File.Create(dest + nomefile))
+                        {
+                            data.CopyTo(targetfile);
+                        }
+                    }
+                }
+                catch (Exception err)
+                {
+                    Debug.WriteLine(err.StackTrace);
                 }
             }
         }
