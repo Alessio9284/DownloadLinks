@@ -1,0 +1,9 @@
+<resources>
+    <string name="app_name">Download Links</string>
+    <string name="url">Inserisci la prima parte dell\'URL</string>
+    <string name="rad">Inserisci la parte prima della cifra (radice)</string>
+    <string name="ext">Inserisci la parte dopo della cifra (estensione)</string>
+    <string name="da">Inserisci il numero iniziale</string>
+    <string name="a">Inserisci il numero finale</string>
+    <string name="des">Destinazione Files</string>
+</resources>
