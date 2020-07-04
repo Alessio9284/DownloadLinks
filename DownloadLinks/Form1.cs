@@ -8,7 +8,7 @@ namespace DownloadLinks
     public partial class finestra : MetroFramework.Forms.MetroForm
     {
         private string url, rad, ext, dest;
-        private int da, a_;
+        private int da, a_, cifre;
         private bool riempimento;
 
         public finestra()
@@ -26,7 +26,7 @@ namespace DownloadLinks
             da = Convert.ToInt32(args[3]);
             a_ = Convert.ToInt32(args[4]);
             riempimento = Convert.ToBoolean(args[5]);
-            dest = args[6];
+            dest = (args[6].EndsWith("\\") || args[6].EndsWith("/") ? args[6] : args[6] + "\\");
         }
 
         private void Form1_Load(object sender, EventArgs e)
@@ -34,7 +34,7 @@ namespace DownloadLinks
             /*url_text.Text = "https://www.animelove-streaming21.cloud/anime/DDL/Anime/Yu-Gi-Oh-Zexal/";
             radice_text.Text = "Yu-Gi-Oh-Zexal_Ep_";
             estensione_text.Text = ".mp4";
-            destinazione_text.Text = @"F:\video\";*/
+            destinazione_text.Text = @"C:\Users\";*/
             da_text.Text = "0";
             a_text.Text = "50";
             no_radio.Checked = true;
@@ -42,12 +42,20 @@ namespace DownloadLinks
 
         private void download_Click(object sender, EventArgs e)
         {
-            for (int i = Convert.ToInt32(da_text.Text); i <= Convert.ToInt32(a_text.Text); i++)
+            int a = Convert.ToInt32(a_text.Text);
+            string dest1 = destinazione_text.Text;
+
+            cifre = (int) Math.Floor(Math.Log(a) / Math.Log(10));
+            destinazione_text.Text = (dest1.EndsWith("\\") || dest1.EndsWith("/") ? dest1 : dest1 + "\\");
+
+            for (int i = Convert.ToInt32(da_text.Text); i <= a; i++)
                 start_download(ref i);
         }
 
         public void download_Terminal()
         {
+            cifre = (int)Math.Floor(Math.Log(a_) / Math.Log(10));
+
             for (int i = da; i <= a_; i++)
                 start_download_terminal(ref i);
         }
@@ -56,14 +64,17 @@ namespace DownloadLinks
         {
             string zeri = "", nomefile;
 
+            nomefile = radice_text.Text;
+
             if (si_radio.Checked == true)
             {
-                // riempimento con zeri
-                if (i < 10) zeri = "00";
-                else if (i < 100) zeri = "0";
+                for (int x = 0; x < cifre - (int)Math.Floor(Math.Log(i) / Math.Log(10)); x++)
+                    zeri += "0";
+
+                nomefile += zeri;
             }
 
-            nomefile = radice_text.Text + zeri + i + estensione_text.Text;
+            nomefile += i + estensione_text.Text;
 
             using (var client = new WebClient())
             {
@@ -90,14 +101,17 @@ namespace DownloadLinks
         {
             string zeri = "", nomefile;
 
+            nomefile = rad;
+
             if (riempimento)
             {
-                // riempimento con zeri
-                if (i < 10) zeri = "00";
-                else if (i < 100) zeri = "0";
+                for (int x = 0; x < cifre - (int)Math.Floor(Math.Log(i) / Math.Log(10)); x++)
+                    zeri += "0";
+
+                nomefile += zeri;
             }
 
-            nomefile = rad + zeri + i + ext;
+            nomefile += i + ext;
 
             using (var client = new WebClient())
             {
