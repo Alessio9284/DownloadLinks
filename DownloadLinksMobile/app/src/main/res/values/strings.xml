@@ -7,4 +7,5 @@
     <string name="a">Inserisci il numero finale</string>
     <string name="des">Destinazione</string>
     <string name="dow">Inizia Download</string>
+    <string name="fill">RIEMPIMENTO CON ZERI</string>
 </resources>
