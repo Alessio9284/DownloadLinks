@@ -21,10 +21,13 @@ import java.io.OutputStream;
 import java.net.URL;
 import java.net.URLConnection;
 
+import static java.io.Console.*;
+
 public class MainActivity extends AppCompatActivity {
     private static final int DIR_REQUEST_CODE = 100;
     private String dest, nomefile;
     private boolean save;
+    private int num;
 
     private Button destination, download;
     private TextView url, rad, ext, from, to;
@@ -59,6 +62,7 @@ public class MainActivity extends AppCompatActivity {
         download.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
+                //aggiungere try per evitare bug
                 int da = Integer.parseInt(from.getText().toString());
                 int a = Integer.parseInt(to.getText().toString());
 
@@ -79,8 +83,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void start_download(int i) {
-        int num;
-
         nomefile = rad.getText().toString();
 
         if (cb.isChecked())
@@ -92,8 +94,10 @@ public class MainActivity extends AppCompatActivity {
 
         nomefile = i + ext.getText().toString();
 
-        int count;
-        try {
+        /*try {
+
+            Log.d("URL", url.getText().toString());
+
             URL url_ = new URL(url.getText().toString());
             URLConnection connection = url_.openConnection();
             connection.connect();
@@ -112,14 +116,14 @@ public class MainActivity extends AppCompatActivity {
 
             long total = 0;
 
-            while ((count = input.read(data)) != -1) {
-                total += count;
+            while ((num = input.read(data)) != -1) {
+                total += num;
                 // publishing the progress....
                 // After this onProgressUpdate will be called
                 pb.setProgress((int) ((total * 100) / lenghtOfFile));
 
                 // writing data to file
-                output.write(data, 0, count);
+                output.write(data, 0, num);
             }
 
             // flushing output
@@ -131,6 +135,6 @@ public class MainActivity extends AppCompatActivity {
 
         } catch (Exception e) {
             Log.e("Error: ", e.getMessage());
-        }
+        }*/
     }
 }
