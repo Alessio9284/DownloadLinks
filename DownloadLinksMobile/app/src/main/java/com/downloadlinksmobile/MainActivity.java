@@ -2,6 +2,7 @@ package com.downloadlinksmobile;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.AsyncTask;
@@ -13,6 +14,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import java.io.BufferedInputStream;
 import java.io.FileOutputStream;
@@ -77,6 +79,7 @@ public class MainActivity extends AppCompatActivity {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == DIR_REQUEST_CODE) {
             dest = data.getDataString();
+            Toast.makeText(MainActivity.this, dest, Toast.LENGTH_LONG).show();
             save = true;
             destination.setBackgroundColor(Color.GREEN);
         }
@@ -94,47 +97,6 @@ public class MainActivity extends AppCompatActivity {
 
         nomefile = i + ext.getText().toString();
 
-        /*try {
-
-            Log.d("URL", url.getText().toString());
-
-            URL url_ = new URL(url.getText().toString());
-            URLConnection connection = url_.openConnection();
-            connection.connect();
-
-            // this will be useful so that you can show a tipical 0-100%
-            // progress bar
-            int lenghtOfFile = connection.getContentLength();
-
-            // download the file
-            InputStream input = new BufferedInputStream(url_.openStream(), 8192);
-
-            // Output stream
-            OutputStream output = new FileOutputStream(dest + nomefile);
-
-            byte data[] = new byte[1024];
-
-            long total = 0;
-
-            while ((num = input.read(data)) != -1) {
-                total += num;
-                // publishing the progress....
-                // After this onProgressUpdate will be called
-                pb.setProgress((int) ((total * 100) / lenghtOfFile));
-
-                // writing data to file
-                output.write(data, 0, num);
-            }
-
-            // flushing output
-            output.flush();
-
-            // closing streams
-            output.close();
-            input.close();
-
-        } catch (Exception e) {
-            Log.e("Error: ", e.getMessage());
-        }*/
+        new DownloadFileFromURL(url + nomefile, dest + nomefile);
     }
 }
